@@ -1,19 +1,22 @@
 import 'dotenv-safe/config'
-import { Telegraf } from 'telegraf'
+import { Telegraf, Scenes } from 'telegraf'
+
+import * as commands from './commands'
 
 if (process.env.BOT_TOKEN === undefined) {
 	throw new TypeError('BOT_TOKEN must be provided!')
 }
 
-const bot = new Telegraf(process.env.BOT_TOKEN)
+export type BotContext = Scenes.SceneContext
+
+const bot = new Telegraf<BotContext>(process.env.BOT_TOKEN)
 
 async function main() {
-	bot.start((ctx) => ctx.reply('Welcome'))
-	await bot.launch()
+	bot.start(commands.help)
 
-	bot.on('text', (ctx) => {
-		return ctx.reply('Hey User!')
-	})
+	bot.help(commands.help)
+
+	await bot.launch()
 }
 main().catch((err) => {
 	throw err
