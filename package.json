@@ -26,6 +26,8 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv-safe": "^8.2.0",
+    "jpeg-js": "^0.4.3",
+    "jsqr": "^1.4.0",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
     "superstruct": "^0.15.2",
