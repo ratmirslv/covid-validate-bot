@@ -10,7 +10,7 @@ export const downloadFile = async (fileUrl: string): Promise<string> => {
 
 	return fetch(fileUrl).then((response) => {
 		if (!response.ok) {
-			throw new Error(`Error download image`)
+			throw new Error(`Ошибка загрузки изображения с сервера`)
 		}
 		response.body.pipe(stream)
 
