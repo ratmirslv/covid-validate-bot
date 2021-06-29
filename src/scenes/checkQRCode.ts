@@ -26,13 +26,10 @@ checkQRCode.enter(async (ctx) => {
 				return await ctx.reply('Изображение не содержит информацию')
 			}
 
-			await ctx.reply(textImage)
-
 			const matchCorrectUrl = textImage.match(/gosuslugi.ru/g)
 
 			if (!matchCorrectUrl) {
-				//TODO добавить вывод текста и кнопку если это ссылка
-				return await ctx.reply('QR не содержит нужную информацию для проверки')
+				return await ctx.reply(`QR код не подходит.\nСодержимое QR кода: ${textImage}`)
 			}
 			const idCertificate = textImage.substr(textImage.lastIndexOf('/') + 1)
 
@@ -41,13 +38,37 @@ checkQRCode.enter(async (ctx) => {
 			if (!certificateData) {
 				return await ctx.replyWithPhoto(
 					{ source: join(__dirname, '../images/bad.png') },
-					{ caption: 'Сертификат не валидный' },
+					{
+						caption: 'Сертификат не валидный',
+						reply_markup: {
+							inline_keyboard: [
+								[
+									{
+										text: 'Ссылка на сайт Госуслуги',
+										url: textImage,
+									},
+								],
+							],
+						},
+					},
 				)
 			}
 
 			return await ctx.replyWithPhoto(
 				{ source: join(__dirname, '../images/valid.png') },
-				{ caption: 'Сертификат валидный' },
+				{
+					caption: `Имя: ${certificateData.fio}\nДата рождения: ${certificateData.birthdate}\nПаспорт: ${certificateData.doc}`,
+					reply_markup: {
+						inline_keyboard: [
+							[
+								{
+									text: 'Ссылка на сайт Госуслуги',
+									url: textImage,
+								},
+							],
+						],
+					},
+				},
 			)
 		} catch (err) {
 			if (err instanceof Error) {
